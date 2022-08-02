@@ -1,7 +1,7 @@
 package com.req.client;
 
 import com.req.client.agent.RequestFactoryBean;
-import com.req.client.agent.RequestHttpImpl;
+import com.req.client.http.RequestHttpImpl;
 import com.sun.istack.internal.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;

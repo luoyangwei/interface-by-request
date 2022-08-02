@@ -1,5 +1,6 @@
 package com.req.client.agent;
 
+import com.req.client.http.RequestHttpImpl;
 import org.springframework.beans.factory.FactoryBean;
 
 import java.lang.reflect.Proxy;

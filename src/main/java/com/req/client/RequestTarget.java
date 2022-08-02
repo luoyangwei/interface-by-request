@@ -1,7 +1,7 @@
 package com.req.client;
 
 import com.alibaba.fastjson.JSON;
-import com.req.client.agent.RequestHttpImpl;
+import com.req.client.http.RequestHttpImpl;
 import com.req.client.http.Header;
 import com.req.client.http.RequestContent;
 import com.req.client.http.RequestMediaType;

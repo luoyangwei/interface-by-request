@@ -2,6 +2,7 @@ package com.req.client.agent;
 
 import com.req.client.RequestTarget;
 import com.req.client.RequestTargetFactory;
+import com.req.client.http.RequestHttpImpl;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
