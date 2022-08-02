@@ -6,7 +6,7 @@ import com.req.client.http.*;
 /**
  * @author luoyangwei by 2022-08-01 14:52 created
  */
-@RequestMark(hostname = "http://dev.hobby666.com/sehobby-access")
+@RequestMark(hostname = "http://xx.xxxx.xx/xx-xx")
 public interface SearchDemoClient {
 
     /**

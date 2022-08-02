@@ -1,10 +1,12 @@
-package com.req.client.agent;
+package com.req.client.http;
 
 import com.req.client.RequestTarget;
 import com.req.client.http.RequestContent;
 import com.req.client.http.RequestMediaType;
 import com.req.client.http.RequestMode;
 import okhttp3.*;
+import okhttp3.Headers;
+import okhttp3.Request;
 import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
@@ -34,17 +36,17 @@ public class RequestHttpImpl {
      * @param content     request content
      * @return request
      */
-    public Request createHttp(String url, Map<String, Object> headersMap, RequestMode requestMode, RequestContent content) {
+    public okhttp3.Request createHttp(String url, Map<String, Object> headersMap, RequestMode requestMode, RequestContent content) {
 
-        Headers.Builder headers = new Headers.Builder();
+        okhttp3.Headers.Builder headers = new Headers.Builder();
         if (!CollectionUtils.isEmpty(headersMap)) {
             for (Map.Entry<String, Object> entry : headersMap.entrySet()) {
                 headers.add(entry.getKey(), String.valueOf(entry.getValue()));
             }
         }
 
-        Request request = null;
-        Request.Builder requestBuilder = new Request.Builder().url(url).headers(headers.build());
+        okhttp3.Request request = null;
+        okhttp3.Request.Builder requestBuilder = new okhttp3.Request.Builder().url(url).headers(headers.build());
         if (RequestMode.POST.equals(requestMode)) {
 
             RequestBody requestBody = null;

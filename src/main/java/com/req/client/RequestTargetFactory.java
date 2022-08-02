@@ -1,8 +1,7 @@
 package com.req.client;
 
-import com.req.client.agent.RequestHttpImpl;
+import com.req.client.http.RequestHttpImpl;
 import com.req.client.http.*;
-import com.req.demo.SearchCommandReq;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Method;
