@@ -1,6 +1,11 @@
 package com.req.client;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.parser.Feature;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.req.client.http.RequestHttpImpl;
 import com.req.client.http.Header;
 import com.req.client.http.RequestContent;
@@ -12,6 +17,8 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +35,11 @@ public class RequestTarget {
      */
     private RequestHttpImpl requestHttp;
 
+    /**
+     * 请求结果转换objectMapper
+     */
+    private ObjectMapperResponseHandler responseHandler;
+
     private String hostname;
     private String url;
     private RequestMode requestMode;
@@ -41,9 +53,10 @@ public class RequestTarget {
     public RequestTarget() {
     }
 
-    public RequestTarget(String hostname, RequestHttpImpl requestHttp) {
+    public RequestTarget(String hostname, RequestHttpImpl requestHttp, ObjectMapperResponseHandler responseHandler) {
         this.hostname = hostname;
         this.requestHttp = requestHttp;
+        this.responseHandler = responseHandler;
     }
 
     /**
@@ -73,7 +86,7 @@ public class RequestTarget {
             if (null != responseBody) {
                 String responseText = responseBody.string();
                 log.info("Request http successful! received response: {}", responseText);
-                return JSON.parseObject(responseText, resultType);
+                return responseHandler.readValue(responseText, resultType);
             }
         }
 

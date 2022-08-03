@@ -17,10 +17,7 @@ public class RequestProxy<T> implements InvocationHandler, Serializable {
     private static final long serialVersionUID = -7735588959788873305L;
     private final RequestTargetFactory requestTargetFactory;
 
-    private final RequestHttpImpl requestHttpClient;
-
     public RequestProxy(RequestHttpImpl requestHttpClient) {
-        this.requestHttpClient = requestHttpClient;
         requestTargetFactory = new RequestTargetFactory(requestHttpClient);
     }
 

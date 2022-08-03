@@ -2,13 +2,13 @@ package com.req;
 
 import com.alibaba.fastjson.JSON;
 import com.req.client.RequestScan;
-import com.req.demo.SearchBaseResult;
-import com.req.demo.SearchCommandReq;
-import com.req.demo.SearchDemoClient;
+import com.req.demo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+
+import java.util.List;
 
 /**
  * @author luoyangwei by 2022-08-01 13:55 created
@@ -23,12 +23,14 @@ public class ReqApplication {
         for (String beanDefinitionName : context.getBeanDefinitionNames()) {
             if ("searchDemoClient".equals(beanDefinitionName)) {
                 SearchDemoClient searchDemoClient = (SearchDemoClient) context.getBean(beanDefinitionName);
-//                searchDemoClient.loadContents();
-
-                SearchCommandReq req = new SearchCommandReq();
-                req.setSk("测试").setType(0).setPage(1).setPageSize(3).setUserType(0);
-                SearchBaseResult<?> result = searchDemoClient.loadUsers(req);
-                log.info("result: {}", JSON.toJSONString(result));
+                SearchOpinionReqVo reqVo = new SearchOpinionReqVo();
+                reqVo.setSk("test");
+                SearchPageResult<SearchOpinionVo> result = searchDemoClient.loadOpinions(reqVo);
+                log.info("result: {}", result);
+                List<SearchOpinionVo> opinionVos = result.getItemList();
+                for (SearchOpinionVo opinionVo : opinionVos) {
+                    log.info("SearchOpinionVo: {}, {}", opinionVo.getOpinionId(), opinionVo.getName());
+                }
             }
         }
     }

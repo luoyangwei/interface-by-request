@@ -1,11 +1,19 @@
 package com.req.client;
 
-import com.req.client.http.RequestHttpImpl;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.req.client.http.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,11 +37,14 @@ public class RequestTargetFactory {
 
     private RequestTarget processRequestTarget(Method method, Object[] args) {
         RequestMark requestMark = getMarkBeanAnnotation(method.getDeclaringClass());
+
         RequestAnnotationNode request = getRequestAnnotationNode(method);
         RequestHeaderAnnotationNode headers = getHeadersAnnotationNode(method);
         Object requestBody = getBody(method.getParameters(), args);
+        ObjectMapperResponseHandler responseHandler =
+                getObjectMapperResponseHandler(method, args, getGenericReturnType(method));
 
-        RequestTarget requestTarget = new RequestTarget(requestMark.hostname(), requestHttpClient);
+        RequestTarget requestTarget = new RequestTarget(requestMark.hostname(), requestHttpClient, responseHandler);
         requestTarget.setUrl(request.getUrl())
                 .setRequestMode(request.getRequestMode())
                 .setResultType(method.getReturnType());
@@ -100,6 +111,18 @@ public class RequestTargetFactory {
             }
         }
         return null;
+    }
+
+    public ParameterizedType[] getGenericReturnType(Method method) {
+        Type type = method.getGenericReturnType();
+        if (type instanceof ParameterizedType) {
+            return new ParameterizedType[]{(ParameterizedType) type};
+        }
+        return new ParameterizedType[]{};
+    }
+
+    public ObjectMapperResponseHandler getObjectMapperResponseHandler(Method method, Object[] args, ParameterizedType[] types) {
+        return new ObjectMapperResponseHandler(method, args, types);
     }
 
     private static class RequestAnnotationNode {

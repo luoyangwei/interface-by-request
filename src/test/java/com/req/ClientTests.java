@@ -11,6 +11,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 /**
  * @author luoyangwei by 2022-08-01 13:56 created
@@ -28,8 +30,20 @@ public class ClientTests {
     @Test
     public void searchDemoClientTest() {
 //        String response = searchDemoClient.loadContents();
-        Object response = searchDemoClient.loadContents();
-        log.info("response: {}", response);
+//        Object response = searchDemoClient.loadOpinions(null);
+//        log.info("response: {}", response);
+    }
+
+    @Test
+    public void genericTest() throws NoSuchFieldException, IllegalAccessException {
+        Method[] methods = searchDemoClient.getClass().getDeclaredMethods();
+        for (Method method : methods) {
+            Field gSig = Method.class.getDeclaredField("signature");
+//            Field field = method.getClass().getDeclaredField("signature");
+            gSig.setAccessible(true);
+            String o = (String) gSig.get(method);
+            log.info("signature: {}", o);
+        }
     }
 
 }

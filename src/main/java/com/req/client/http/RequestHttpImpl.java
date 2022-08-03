@@ -74,6 +74,7 @@ public class RequestHttpImpl {
         try {
             return httpClient.newCall(request).execute();
         } catch (IOException e) {
+            e.printStackTrace();
             return null;
         }
     }
